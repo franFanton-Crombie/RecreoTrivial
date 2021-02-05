@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2016",
+      "jsx": "preserve",
+      "checkJs": true,
+      "baseUrl": "./src",
+      "resolveJsonModule": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*",
+        "ios",
+        "android",
+        "__tests__"
+    ]
+  }
