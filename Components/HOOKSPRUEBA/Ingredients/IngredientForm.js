@@ -3,18 +3,16 @@ import { View,Text,StyleSheet } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Card from '../UI/Card';
 
-const IngredientForm = () => {
+const IngredientForm = (props) => {
     const [name , setName] = useState('');
     const [amount, setAmount] = useState('');
-
-    const imprimir = (name,amount) => {
-        console.log(name,amount)
-    };
-    const submitHandler = event => {
-        event.preventDefault();
+    const { onAddIngredient } = props;
+    const submitHandler = (name,amount) => {
+        onAddIngredient({name:name,amount:amount});
     };
     
     return(
+        <Card>
         <View style={styles.container}>
             <View style={{flexDirection:'column'}}>
                 <View style={styles.vistaRow}>
@@ -33,18 +31,20 @@ const IngredientForm = () => {
                         value={amount}
                         onChangeText={amount => {
                             setAmount(amount)
-                        }}/>
+                        }}
+                        />
                 </View>
             </View>
             <View style={{flexDirection:'column'}}>
                 <TouchableOpacity
                     delayPressIn={0}
-                    onPress={() => imprimir(name,amount)}
+                    onPress={() => submitHandler(name,amount)}
                     style={styles.boton}>
                     <Text style={styles.textBoton}>+</Text>
                 </TouchableOpacity>
             </View>
         </View>
+        </Card>
     )
 };
 
