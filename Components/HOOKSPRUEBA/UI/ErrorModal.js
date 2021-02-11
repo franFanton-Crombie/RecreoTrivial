@@ -10,6 +10,7 @@ import {
 
 const ErrorModal = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    
     return(
         <View style={styles.centeredView}>
       <Modal
@@ -22,15 +23,16 @@ const ErrorModal = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+            <Text style={styles.modalText}>Error de Base de Datos.</Text>
 
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
                 setModalVisible(!modalVisible);
+                
               }}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Cerrar</Text>
             </TouchableHighlight>
           </View>
         </View>
