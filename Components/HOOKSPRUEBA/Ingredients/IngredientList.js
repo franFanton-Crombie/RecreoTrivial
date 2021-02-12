@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const Ingredientlist = (props) => {
     const { onRemoveIngredient } = props;
     const { ingredients } = props;
+    
     return(
         <View style={styles.container}>
             <Text style={styles.titulo}>List of Ingredient</Text>

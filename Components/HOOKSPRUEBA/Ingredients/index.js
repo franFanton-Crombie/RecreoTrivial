@@ -1,4 +1,4 @@
-import  React ,{ useEffect, useState , useCallback, useReducer } from 'react';
+import  React ,{ useEffect, useState , useCallback, useReducer, useMemo } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import IngredientForm from './IngredientForm';
@@ -6,6 +6,7 @@ import Ingredientlist from './IngredientList';
 import Search from './Search';
 import LoadingIndicator from '../UI/LoadingIndicator';
 import ErrorModal from '../UI/ErrorModal';
+import useHttp from '../Hooks/http';
 
 function ingredientReducer(currentIngredients, action){
     switch (action.type){
@@ -19,53 +20,47 @@ function ingredientReducer(currentIngredients, action){
             throw new Error('Should not get there!');
     }
 }
+
 const Ingredients = () => {
     const [userIngredients, dispatch] = useReducer(ingredientReducer,[]);
-    //const [ingredients, setIngredients] = useState([]);
-    const [isLoading , setLoading] = useState(false);
-    const [error , setError] = useState(false);
-
-    const addIngredients = ingredient => {
-        setLoading(true);
+    useHttp();
+    
+    const addIngredients = useCallback(ingredient => {
+        dispatchHttp({type: 'SEND'});
         fetch('https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients.json',{
         method: 'POST',
         body: JSON.stringify(ingredient),
         headers: {'Content-Type': 'application/json'}
     }).then(response => {
-        setLoading(false);
+        dispatchHttp({type: 'RESPONSE'});
         return response.json();
         }).then(responseData => {
-            //setIngredients(prevIngredients => 
-              //  [...prevIngredients ,{id: responseData.name, ...ingredient}]);
-            dispatch({type: 'ADD' , ingredient: {{id: responseData.name, ...ingredient}}});
+            dispatch({type: 'ADD' , ingredient: {id: responseData.name, ...ingredient}});
         });
-    }
+    },[]);
 
     const filteredIngredients = useCallback(filteredIngredients => {
-        //setIngredients(filteredIngredients);
         dispatch({ type: 'SET', ingredients: filteredIngredients });
     }, []);
 
-    const removeIngredients = ingredientId => {
-        setLoading(true);
-        fetch(`https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,{
-        //fetch(`https://asdadsradsaasdadsn`,{
-        method: 'DELETE',
-        }).then(response => {
-            setLoading(false);
-            setIngredients(prevIngredients => 
-                prevIngredients.filter(ingredient => ingredient.id !== ingredientId));
-        }).catch(error => {
-            console.log('ERROR');
-            setError(true);
-            setLoading(true);
-        });
-    }
+    const removeIngredients = useCallback(ingredientId => {
+        dispatchHttp({type: 'SEND'});
+        
+    },[]);
 
-    const clearError = () => {
-        setError(null);
-        setLoading(false);
-    }
+    const clearError = useCallback(() => {
+        dispatchHttp({type: 'CLEAR'});
+    },[]);
+
+    const ingredientList = useMemo(() => {
+        return(
+            <Ingredientlist 
+            ingredients={userIngredients} 
+            onRemoveIngredient={removeIngredients}
+            />
+        );
+    },[userIngredients,removeIngredients]);
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -75,14 +70,11 @@ const Ingredients = () => {
                     />                
                 </View>
                 <View>
-                { isLoading ? <LoadingIndicator /> : null}
+                { httpState.loading ? <LoadingIndicator /> : null}
                 </View>
                 <View>
                     <Search onLoadedIngredients={filteredIngredients}/>
-                    <Ingredientlist 
-                        ingredients={ingredients} 
-                        onRemoveIngredient={removeIngredients}
-                    />
+                    {ingredientList}
                 </View>
             </ScrollView>
         </SafeAreaView>
