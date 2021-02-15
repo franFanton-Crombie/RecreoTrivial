@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text
-} from 'react-native';
-import Colors from './res/colors';
-import Inicio from './components/Inicio';
-import Juego from './components/Question';
-import Hooks from './components/HOOKSPRUEBA';
+import Inicio from './Components/Inicio';
+import Juego from './Components/Question';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,7 +15,6 @@ const App = () => {
       }}>
         <Stack.Screen name={'Inicio'} component={Inicio} />
         <Stack.Screen name={'Juego'} component={Juego} />
-        <Stack.Screen name={'Hooks'} component={Hooks} />
       </Stack.Navigator>
     </NavigationContainer>
     
