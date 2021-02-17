@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,SafeAreaView,Image,StyleSheet,Text,TouchableOpacity, Touchable } from 'react-native';
+import { View,SafeAreaView,Image,StyleSheet,Text,TouchableOpacity } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,14 +24,6 @@ const Inicio = () =>{
                     >
                         <Text>Jugar!</Text>
                     </TouchableOpacity>
-                    <View>
-                        <TouchableOpacity
-                            style={styles.boton}
-                            onPress={() => navigation.push('Hooks')}
-                        >
-                            <Text>Probando Hoooks</Text>
-                        </TouchableOpacity>
-                    </View>
                 </Animated.View>
             </View>
             
@@ -43,7 +35,6 @@ const styles = StyleSheet.create({
     vistaImagen: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 20,
     },
     animacion: {
         marginTop: 100,
