@@ -6,7 +6,7 @@ import Ingredientlist from './IngredientList';
 import Search from './Search';
 import LoadingIndicator from '../UI/LoadingIndicator';
 import ErrorModal from '../UI/ErrorModal';
-import useHttp from '../Hooks/http';
+import useHttp from '../Hooks/useHttp';
 
 function ingredientReducer(currentIngredients, action){
     switch (action.type){
@@ -22,11 +22,10 @@ function ingredientReducer(currentIngredients, action){
 }
 
 const Ingredients = () => {
+    const { isLoading,error,data,sendRequest } = useHttp();
     const [userIngredients, dispatch] = useReducer(ingredientReducer,[]);
-    useHttp();
-    
     const addIngredients = useCallback(ingredient => {
-        dispatchHttp({type: 'SEND'});
+        /*dispatchHttp({type: 'SEND'});
         fetch('https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients.json',{
         method: 'POST',
         body: JSON.stringify(ingredient),
@@ -36,7 +35,7 @@ const Ingredients = () => {
         return response.json();
         }).then(responseData => {
             dispatch({type: 'ADD' , ingredient: {id: responseData.name, ...ingredient}});
-        });
+        });*/
     },[]);
 
     const filteredIngredients = useCallback(filteredIngredients => {
@@ -44,12 +43,11 @@ const Ingredients = () => {
     }, []);
 
     const removeIngredients = useCallback(ingredientId => {
-        dispatchHttp({type: 'SEND'});
-        
-    },[]);
+        sendRequest(`https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,'DELETE');
+    },[sendRequest]);
 
     const clearError = useCallback(() => {
-        dispatchHttp({type: 'CLEAR'});
+        //dispatchHttp({type: 'CLEAR'});
     },[]);
 
     const ingredientList = useMemo(() => {
@@ -67,10 +65,11 @@ const Ingredients = () => {
                 <View>
                     <IngredientForm 
                         onAddIngredient={addIngredients}
+                        loading={isLoading}
                     />                
                 </View>
                 <View>
-                { httpState.loading ? <LoadingIndicator /> : null}
+                { isLoading ? <LoadingIndicator /> : null}
                 </View>
                 <View>
                     <Search onLoadedIngredients={filteredIngredients}/>
