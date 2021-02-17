@@ -2,38 +2,35 @@ import React from 'react';
 import {View,Text,StyleSheet,TouchableOpacity, Dimensions} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fragment } from 'react';
-import { questions } from './data';
 
-export default function QuestionSlide({question,questionNro}){
+interface QuestionSlideProps {
+    question: string,
+    questionNro: number,
+    
+}
+
+export default function QuestionSlide({question,questionNro,answersSelected} : QuestionSlideProps){
     const respuestas = [];
     respuestas.push(question?.correct_answer);
     const respuestasCompletas = respuestas.concat(question?.incorrect_answers);
 
-    const answersSelected = (data) => {
-        console.log(data);
-    }
-    
     return(
         <SafeAreaView style={styles.contaimer}>
-            <View style={styles.vista}>
-                <Text style={styles.titulo}>Pregunta Nro: {questionNro}</Text>
+            <View>
+                <Text style={styles.titulo}>Questions Number: {questionNro}</Text>
                 <Text style={styles.titulo}>{question?.question}</Text>
                 <View style={styles.vistaRespuestas}>
                     {respuestasCompletas.map((_,index) => (
                         <Fragment key={index}>
                             <TouchableOpacity 
-                                onPress={answersSelected(respuestasCompletas[index])}
+                                onPress={() => {
+                                    answersSelected(respuestasCompletas[index],index)}}
                                 style={styles.boton}
                             >
                                 <Text>{respuestasCompletas[index]}</Text>
                             </TouchableOpacity>
                         </Fragment>
                     ))}
-                </View>
-                <View style={styles.vistaRespuestas}>
-                    <TouchableOpacity style={styles.botonNext}>
-                        <Text>Next</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>
@@ -43,10 +40,11 @@ export default function QuestionSlide({question,questionNro}){
 
 const styles = StyleSheet.create({
     contaimer: {
+        flex: 1,
         alignItems: 'center',
         width: Dimensions.get('window').width,
-        height: '100%',
-        backgroundColor: '#386BF4'
+        backgroundColor: '#386BF4',
+        
     },
     titulo: {
         fontSize: 15,

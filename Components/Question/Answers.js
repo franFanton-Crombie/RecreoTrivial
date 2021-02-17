@@ -8,9 +8,7 @@ interface AnswersProps {
     answersSelected:(answer: string, index: number) => void;
 }
 
-export default function Answers({answers , answersSelected}:AnswersProps) {
-    console.log(answers);
-    
+export default function Answers({answers , answersSelected}:AnswersProps) {  
     return(
     <View style={{...styles.container}}>
         {answers.map((_,index) => (

@@ -26,6 +26,6 @@ export const grabQuizQuestions = async(
     const data = await(await fetch(endpoint)).json();
 
     return data.results.map((quizprops: QuizProps) => ({
-        ...quizprops
+        ...quizprops,
     }));  
 };
