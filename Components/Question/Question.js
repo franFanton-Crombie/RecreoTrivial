@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View,ScrollView,Animated,Text,StyleSheet,SafeAreaView, Dimensions} from 'react-native';
-import { questions } from './data'; 
+import { View,ScrollView,Text,StyleSheet,SafeAreaView, Dimensions} from 'react-native';
 import { Fragment } from 'react';
 import QuestionSlide from './QuestionSlide';
 import { funcionRara, grabQuizQuestions, QuestionDifficulty } from '../Helpers/DataQuest';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Alert from './Alert';
-import { SpringUtils, useValue, Value } from 'react-native-reanimated';
+import { useValue } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import ModalResult from './ModalResult';
+
 export type currAnswerObjectProps = {
     question: string,
     answer: string,
@@ -48,7 +47,6 @@ const Question = () => {
         QuestionDifficulty.HARD,
     ]);
     const answersSelected = (answer:string, index:number) => {
-        console.log('SELECCIONADO: ',answer,' - ',index);
         if(!quizOver){
             setAnswerIsCorrect(allQuestions[curNum].correct_answer === answer);
         }
@@ -63,6 +61,7 @@ const Question = () => {
         }
         setUserSelectedAnswers((curranswers) => [...curranswers,currAnswerObject])
     }
+
     const nextQuestion = () => {
         if(!quizOver && curNum < allQuestions.length - 1){
             setCurNum((number) => number + 1);
@@ -71,6 +70,7 @@ const Question = () => {
             setQuizOver(true);
         }
     }
+
     useEffect(() => {
         if(!quizOver){
             if(scroll.current){
@@ -78,11 +78,13 @@ const Question = () => {
             }
         }
     },[curNum])
+
     useEffect(() => {
         if(userSelectedAnswers.length > 0){
             nextQuestion();
         }
     },[userSelectedAnswers]);
+
     useEffect(() => {
         startJob();
     },[]);
@@ -95,15 +97,9 @@ const Question = () => {
         }
     },[quizOver]);
 
-    /*const finished = withSpringTransition(finishedValue, {
-        ...SpringUtils.makeDefaultConfig(),
-        overshootClamping: true,
-        damping: new Value(10),
-    });*/
-    
     return(
         <SafeAreaView style={{flex: 1 , backgroundColor:'#386BF4'}}>
-            <>
+            <View>
             {qloading ? (
                 <View style={styles.vistaCarga}>
                     <Text style={styles.textoCarga}>
@@ -126,29 +122,25 @@ const Question = () => {
                         <Fragment key={index}>
                             <View style={{flexDirection:'column'}}>
                                 <QuestionSlide {...{question,index}} questionNro={curNum +1} answersSelected={answersSelected}/>
-                                <View style={{alignItems: 'center'}}>
-                                    <TouchableOpacity
-                                        style={styles.botonNext}
-                                        onPress={nextQuestion}
-                                    >
-                                    {last ? <Text>SUBMIT</Text> : <Text>NEXT</Text>}
-                                    </TouchableOpacity>
-                                </View>
+                                {last ? 
+                                    <View style={{alignItems: 'center', height: 100}}>
+                                    <ModalResult
+                                    onRestart={() => {
+                                        startJob();
+                                        navigation.push('Inicio');
+                                    }}
+                                    userAnswer={userSelectedAnswers}
+                                    />
+                                    </View>
+                                    : null 
+                                }
                             </View>
                         </Fragment>
                     )})}
                 </ScrollView>
             </View>
             )}
-            <Alert
-                onRestart={() => {
-                    finishedValue.setValue(0);
-                    startJob();
-                    navigation.push('Inicio');
-                }}
-                userAnswer={userSelectedAnswers}/>
-            </>
-            
+            </View>
         </SafeAreaView>
     )
 };
@@ -181,7 +173,7 @@ const styles = StyleSheet.create({
     },
     botonNext: {
         backgroundColor: 'blue',
-        width: 60,
+        width: 80,
         padding: 5,
         borderRadius: 10,
         alignItems: 'center',

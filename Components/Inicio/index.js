@@ -15,7 +15,7 @@ const Inicio = () =>{
             </View>
             <View>
                 <Animated.View style={styles.animacion}>
-                    <Text style={styles.titulo}>Recreo Trivials</Text>
+                    <Text style={styles.titulo}>Recreo Trivias</Text>
                     <Text style={styles.titulo2}>Juga para obtener grandes beneficios.</Text>
                     <TouchableOpacity 
                         delayPressIn={0}
@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     animacion: {
-        marginTop: 100,
+        marginTop: 50,
         backgroundColor: '#386BF4',
-        height: 800,
+        height: 200,
         width: '100%',
         position: 'absolute',
         alignSelf: 'center',
