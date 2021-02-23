@@ -6,6 +6,8 @@ import { funcionRara, grabQuizQuestions, QuestionDifficulty } from '../Helpers/D
 import { useValue } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import ModalResult from './ModalResult';
+import moment from 'moment';
+import { useTimer } from 'react-timer-hook';
 
 export type currAnswerObjectProps = {
     question: string,
@@ -22,7 +24,6 @@ const Question = () => {
     const [score,setScore] = useState(0);
     const [totalQuestions] = useState(10);
     const [quizOver,setQuizOver] = useState(false);
-    const [scrolling,setScrolling] = useState(false);
     const [curNum,setCurNum] = useState(0);
     /**@type {React.MutableRefObject<ScrollView>} */
     const scroll= useRef(null);
@@ -41,17 +42,12 @@ const Question = () => {
         setQloading(false);
     }
 
-    const shuffledDifficulty = funcionRara ([
-        QuestionDifficulty.EASY,
-        QuestionDifficulty.MEDIUM,
-        QuestionDifficulty.HARD,
-    ]);
-    const answersSelected = (answer:string, index:number) => {
+    const answersSelected = (answer) => {
         if(!quizOver){
             setAnswerIsCorrect(allQuestions[curNum].correct_answer === answer);
         }
         if(answerIsCorrect){
-            setScore((currScore) => currScore + 1);
+            setScore((score) => score + 1);
         }
         const currAnswerObject = {
             question: allQuestions[curNum].question,
@@ -68,6 +64,7 @@ const Question = () => {
         }
         else{
             setQuizOver(true);
+            pause();
         }
     }
 
@@ -89,13 +86,28 @@ const Question = () => {
         startJob();
     },[]);
 
-    const finishedValue = useValue(0);
-
-    useEffect(() => {
-        if(quizOver){
-            finishedValue.setValue(1);
-        }
-    },[quizOver]);
+    // TEMPORIZADOR
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + 5);
+    const {
+        seconds,
+        minutes,
+        hours,
+        days,
+        isRunning,
+        start,
+        pause,
+        resume,
+        restart,
+    } = useTimer({ expiryTimestamp:time, onExpire: () => {
+        const time = new Date();
+        time.setSeconds(time.getSeconds() + 5);
+        restart(time);
+        answersSelected("asd");
+        console.log("asd: ",allQuestions);
+        }})
+    
+    
 
     return(
         <SafeAreaView style={{flex: 1 , backgroundColor:'#386BF4'}}>
@@ -108,7 +120,7 @@ const Question = () => {
                 </View>
             )
             : (
-            <View style={{height:500}}>
+            <View>
                 <ScrollView
                 horizontal={true}
                 pagingEnabled={true}
@@ -116,27 +128,36 @@ const Question = () => {
                 scrollEnabled={false}
                 bounces={false}
                 ref={scroll}>
-                    {allQuestions.map((question,index) => {
-                        const last = index === allQuestions.length - 1; 
+                    {
+                    allQuestions.map((question,index) => {
                         return(
                         <Fragment key={index}>
                             <View style={{flexDirection:'column'}}>
-                                <QuestionSlide {...{question,index}} questionNro={curNum +1} answersSelected={answersSelected}/>
-                                {last ? 
-                                    <View style={{alignItems: 'center', height: 100}}>
-                                    <ModalResult
+                                <View style={{flexDirection: 'row'}}>
+                                    <QuestionSlide
+                                    hours={hours}
+                                    minutes={minutes}
+                                    seconds={seconds}
+                                    {...{question,index}} 
+                                    questionNro={curNum +1}
+                                    answersSelected={answersSelected}/>
+                                </View>
+                                <ModalResult
                                     onRestart={() => {
                                         startJob();
                                         navigation.push('Inicio');
                                     }}
+                                    visible={quizOver}
+                                    onClose={() => {
+                                        setQuizOver(false);
+                                        navigation.push('Inicio');
+                                    }}
                                     userAnswer={userSelectedAnswers}
-                                    />
-                                    </View>
-                                    : null 
-                                }
+                                />
                             </View>
                         </Fragment>
-                    )})}
+                    )})
+                    }
                 </ScrollView>
             </View>
             )}
@@ -153,10 +174,8 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     container: {
-        backgroundColor: 'red',
     },
     animacion: {
-        backgroundColor: 'red',
         height: 200,
         width: 200
     },

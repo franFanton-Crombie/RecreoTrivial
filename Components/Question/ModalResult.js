@@ -1,13 +1,12 @@
 import React, { useState,useEffect } from "react";
-import { Alert, Modal, StyleSheet, Text, Pressable, View ,TouchableOpacity} from "react-native";
+import { Alert, Modal, StyleSheet, Text, Image, View ,TouchableOpacity} from "react-native";
 
-const ModalResult = ({onRestart,userAnswer}) => {
-    const [modalVisible, setModalVisible] = useState(false);
+const ModalResult = ({onRestart,userAnswer,visible,onClose}) => {
     const [percent,setPercert] = useState(0);
     const [correctCount, setCorrectCount] =useState(0); 
 
     const calculateScore = () => {
-        let correct = 0;
+        let correct = 1;
         for(const el of userAnswer){
             if(el.answerIsCorrect){
                 correct++;
@@ -20,54 +19,57 @@ const ModalResult = ({onRestart,userAnswer}) => {
     };
 
     useEffect(() => {
-        calculateScore();
+      calculateScore();
     },[userAnswer]);
+
     return (
         <View style={styles.centeredView}>
         <Modal
             animationType="fade"
             transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-            }}
+            visible={visible}
+            onRequestClose={onClose}
         >
-            <View style={styles.centeredView}>
+            <View>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Your result is: <Text>{percent > 50 ? "Passed" : "Failed"}</Text></Text>
+                    <Text style={styles.modalText}>Your result is: <Text>{percent > 60 ? "Passed" : "Failed"}</Text></Text>
+                    <View>
+                      {percent > 60
+                        ?
+                        <Image 
+                          source={require('../../assets/images/homer_happy.gif')}
+                          style={{width:350 , height: 200,backgroundColor:'#386BF4'}}
+                          resizeMode='cover'/>
+                        :
+                        <Image 
+                          source={require('../../assets/images/homer_sad.gif')}
+                          style={{ width:350 , height: 200,backgroundColor:'#386BF4'}}
+                          resizeMode='cover'/>
+                      }
+                    </View>
                     <View style={{flex:1,alignItems:'center',backgroundColor:'white'}}>
-                        <Text style={{textAlign:'center',color:'red',fontSize:20}}>{percent} %SCORE</Text>
+                        <Text style={{textAlign:'center',color:'red',fontSize:20,marginTop:10}}>{percent} %SCORE</Text>
                         <Text style={{fontWeight:'bold',color:'black',marginTop:10}}>Your quiz completed successfully</Text>
                         <Text style={{fontWeight:'bold',marginTop:20,textAlign:'center'}}>Your attempted {userAnswer.length} questions and you only got {" "} {correctCount} in the quiz test.</Text>
                         <TouchableOpacity
                             style={[styles.button, styles.buttonClose]}
                             onPress={onRestart}
                         >
-                            <Text style={{color:'white'}}>Close</Text>
+                            <Text style={{color:'black'}}>Close</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                
-
             </View>
         </Modal>
-        <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(true)}
-        >
-            <Text style={styles.textStyle}>Result</Text>
-        </Pressable>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+  centeredView:{
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center'
   },
   modalView: {
     margin: 20,
@@ -83,19 +85,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: 300
+    height: 450,
+    marginTop: 300
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginTop: 30
-  },
-  buttonOpen: {
+    marginTop: 20,
     backgroundColor: "white",
   },
   buttonClose: {
-    backgroundColor: "blue",
+    backgroundColor: "#A3FF73",
   },
   textStyle: {
     color: "black",

@@ -6,12 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 const Inicio = () =>{
     const navigation = useNavigation();
     return(
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1,backgroundColor:'#386BF4'}}>
             <View style={styles.vistaImagen}>
                 <Image 
-                    source={require('../../assets/images/ReCreoDefaultImage.png')}
-                    style={{flex: 1, height: 300}}
-                    resizeMode='contain'/>
+                    source={require('../../assets/images/homer_trivia.gif')}
+                    style={{flex: 1, height: 300,backgroundColor:'#386BF4'}}
+                    resizeMode='cover'/>
             </View>
             <View>
                 <Animated.View style={styles.animacion}>
