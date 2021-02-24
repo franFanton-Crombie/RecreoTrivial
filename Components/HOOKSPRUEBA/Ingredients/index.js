@@ -1,4 +1,4 @@
-import  React ,{ useEffect, useState , useCallback, useReducer, useMemo } from 'react';
+import  React ,{ useCallback, useReducer, useMemo, useEffect } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import IngredientForm from './IngredientForm';
@@ -22,33 +22,45 @@ function ingredientReducer(currentIngredients, action){
 }
 
 const Ingredients = () => {
-    const { isLoading,error,data,sendRequest } = useHttp();
+    const { isLoading,error,data,sendRequest,requestExtra,requestIdentifier,clear } = useHttp();
     const [userIngredients, dispatch] = useReducer(ingredientReducer,[]);
+
     const addIngredients = useCallback(ingredient => {
-        /*dispatchHttp({type: 'SEND'});
-        fetch('https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients.json',{
-        method: 'POST',
-        body: JSON.stringify(ingredient),
-        headers: {'Content-Type': 'application/json'}
-    }).then(response => {
-        dispatchHttp({type: 'RESPONSE'});
-        return response.json();
-        }).then(responseData => {
-            dispatch({type: 'ADD' , ingredient: {id: responseData.name, ...ingredient}});
-        });*/
-    },[]);
+        sendRequest(
+            'https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients.json',
+            'POST',
+            JSON.stringify(ingredient),
+            ingredient,
+            'ADD_INGREDIENT'
+        );
+    },[sendRequest]);
 
     const filteredIngredients = useCallback(filteredIngredients => {
         dispatch({ type: 'SET', ingredients: filteredIngredients });
     }, []);
 
     const removeIngredients = useCallback(ingredientId => {
-        sendRequest(`https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,'DELETE');
+        sendRequest(
+            `https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,
+            'DELETE',
+            null,
+            ingredientId,
+            'REMOVE_INGREDIENT'
+        );
     },[sendRequest]);
 
     const clearError = useCallback(() => {
-        //dispatchHttp({type: 'CLEAR'});
+        clear();
     },[]);
+
+    useEffect(() => {
+        if(!isLoading && !error && requestIdentifier === 'REMOVE_INGREDIENT'){
+            dispatch({type: 'DELETE', id: requestExtra}) 
+        }
+        else if(!isLoading && !error && requestIdentifier === 'ADD_INGREDIENT'){
+            dispatch({type: 'ADD' , ingredient: {id: data.name, ...requestExtra}});
+        }
+    },[data,requestExtra,isLoading,error]);
 
     const ingredientList = useMemo(() => {
         return(

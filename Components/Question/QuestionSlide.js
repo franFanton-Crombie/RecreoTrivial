@@ -1,8 +1,6 @@
 import React from 'react';
-import {View,Text,StyleSheet,TouchableOpacity, Dimensions} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {View,Text,StyleSheet,TouchableOpacity, Dimensions,SafeAreaView} from 'react-native';
 import { Fragment } from 'react';
-import { questions } from './data';
 
 export default function QuestionSlide({question,questionNro}){
     const respuestas = [];
@@ -15,7 +13,7 @@ export default function QuestionSlide({question,questionNro}){
     
     return(
         <SafeAreaView style={styles.contaimer}>
-            <View style={styles.vista}>
+            <View>
                 <Text style={styles.titulo}>Pregunta Nro: {questionNro}</Text>
                 <Text style={styles.titulo}>{question?.question}</Text>
                 <View style={styles.vistaRespuestas}>

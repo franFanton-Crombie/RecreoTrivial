@@ -8,7 +8,7 @@ import {
   View
 } from "react-native";
 
-const ErrorModal = useMemo(() => {
+const ErrorModal = () => {
     const [modalVisible, setModalVisible] = useState(false);
     
     return(
@@ -48,7 +48,7 @@ const ErrorModal = useMemo(() => {
       </TouchableHighlight>
     </View>
     )
-},[]);
+}
 
 const styles = StyleSheet.create({
     centeredView: {
