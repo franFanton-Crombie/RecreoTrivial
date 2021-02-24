@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {View,Text,StyleSheet,TouchableOpacity, Dimensions} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fragment } from 'react';
-import { useTimer } from 'react-timer-hook';
 
-export default function QuestionSlide({question,questionNro,answersSelected,hours,minutes,seconds}){
+export default function QuestionSlide({question,questionNro,answersSelected}){
     const respuestas = [];
     respuestas.push(question?.correct_answer);
     const respuestasCompletas = respuestas.concat(question?.incorrect_answers);
@@ -14,7 +13,6 @@ export default function QuestionSlide({question,questionNro,answersSelected,hour
         <SafeAreaView style={styles.contaimer}>
             <View>
                 <Text style={styles.tituloNumber}>Questions Number: {questionNro}</Text>
-                <Text style={styles.tituloNumber}>Time: {hours}:{minutes}:{seconds}</Text>
                 <Text style={styles.pregunta}>{question?.question}</Text>
                 <View style={styles.vistaRespuestas}>
                     {respuestasCompletas.map((respuesta,index) => (

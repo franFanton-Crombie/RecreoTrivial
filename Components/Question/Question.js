@@ -6,8 +6,6 @@ import { funcionRara, grabQuizQuestions, QuestionDifficulty } from '../Helpers/D
 import { useValue } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import ModalResult from './ModalResult';
-import moment from 'moment';
-import { useTimer } from 'react-timer-hook';
 
 export type currAnswerObjectProps = {
     question: string,
@@ -64,7 +62,6 @@ const Question = () => {
         }
         else{
             setQuizOver(true);
-            pause();
         }
     }
 
@@ -85,29 +82,6 @@ const Question = () => {
     useEffect(() => {
         startJob();
     },[]);
-
-    // TEMPORIZADOR
-    const time = new Date();
-    time.setSeconds(time.getSeconds() + 5);
-    const {
-        seconds,
-        minutes,
-        hours,
-        days,
-        isRunning,
-        start,
-        pause,
-        resume,
-        restart,
-    } = useTimer({ expiryTimestamp:time, onExpire: () => {
-        const time = new Date();
-        time.setSeconds(time.getSeconds() + 5);
-        restart(time);
-        answersSelected("asd");
-        console.log("asd: ",allQuestions);
-        }})
-    
-    
 
     return(
         <SafeAreaView style={{flex: 1 , backgroundColor:'#386BF4'}}>
@@ -135,9 +109,6 @@ const Question = () => {
                             <View style={{flexDirection:'column'}}>
                                 <View style={{flexDirection: 'row'}}>
                                     <QuestionSlide
-                                    hours={hours}
-                                    minutes={minutes}
-                                    seconds={seconds}
                                     {...{question,index}} 
                                     questionNro={curNum +1}
                                     answersSelected={answersSelected}/>
