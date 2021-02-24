@@ -24,6 +24,13 @@ const Inicio = () =>{
                     >
                         <Text>Jugar!</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity 
+                        delayPressIn={0}
+                        style={styles.boton}
+                        onPress={() => navigation.push('Hooks')}
+                    >
+                        <Text>Pruebas Hooks</Text>
+                    </TouchableOpacity>
                 </Animated.View>
             </View>
             

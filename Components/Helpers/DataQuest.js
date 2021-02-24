@@ -1,5 +1,6 @@
-export const funcionRara = (array: any) => 
-[...array].sort(() => Math.random() - 0.7);
+export const funcionRara = (array: any) => {
+    [...array].sort(() => Math.random() - 0.7);
+} 
 
 export const QuestionDifficulty = {
     EASY : 'easy',

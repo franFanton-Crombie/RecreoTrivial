@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {View,Text,StyleSheet,TouchableOpacity, Dimensions} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {View,Text,StyleSheet,TouchableOpacity, Dimensions,SafeAreaView} from 'react-native';
 import { Fragment } from 'react';
 
 export default function QuestionSlide({question,questionNro,answersSelected}){

@@ -4,7 +4,7 @@ import Juego from './components/Question';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import Hooks from './components/HOOKSPRUEBA/Ingredients';
 const Stack = createStackNavigator();
 const App = () => {
   return (
@@ -15,6 +15,8 @@ const App = () => {
       }}>
         <Stack.Screen name={'Inicio'} component={Inicio} />
         <Stack.Screen name={'Juego'} component={Juego} />
+        <Stack.Screen name={'Hooks'} component={Hooks} />
+
       </Stack.Navigator>
     </NavigationContainer>
     
