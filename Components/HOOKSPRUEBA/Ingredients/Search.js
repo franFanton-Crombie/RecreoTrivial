@@ -3,10 +3,9 @@ import { View,TextInput , StyleSheet ,Text } from 'react-native';
 import useHttp from '../Hooks/useHttp';
 import Card from '../UI/Card';
 
-const Search = (props) => {
+const Search = ({onLoadedIngredients}) => {
     const [search , setSearch] = useState('');
-    const { onLoadedIngredients } = props;
-    const { isLoading , data , error , sendRequest , clear } = useHttp();
+    const { isLoading , data , error , sendRequest } = useHttp();
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -15,7 +14,6 @@ const Search = (props) => {
                 : `?orderBy="name"&equalTo="${search}"`;
             sendRequest('https://react-hooks-update-2a961-default-rtdb.firebaseio.com/ingredients.json' + query, 'GET');
         },500);
-
         return () => clearTimeout(timeoutId);
     }, [search, onLoadedIngredients,sendRequest]);
 
@@ -32,6 +30,7 @@ const Search = (props) => {
                 onLoadedIngredients(loadedIngredients);
         }
     },[data,isLoading,error,onLoadedIngredients]);
+    
     return(
         <Card>
             <View style={styles.container}>

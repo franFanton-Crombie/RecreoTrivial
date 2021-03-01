@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,SafeAreaView,Text,StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import Question from './Question';
 
 const Juego = () => {
@@ -9,9 +9,5 @@ const Juego = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-
-});
 
 export default Juego;

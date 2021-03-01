@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {View,Text,StyleSheet} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Ingredientlist = (props) => {
-    const { onRemoveIngredient } = props;
-    const { ingredients } = props;
-    
-    return(
+const Ingredientlist = ({ingredients,onRemoveIngredient}) => {
+    return useMemo(() => (
         <View style={styles.container}>
             <Text style={styles.titulo}>List of Ingredient</Text>
             {ingredients.map(index => (
@@ -28,7 +25,7 @@ const Ingredientlist = (props) => {
                 </View>
             ))}
         </View>
-    );
+    ),[ingredients,onRemoveIngredient]);
 };
 
 const styles = StyleSheet.create({

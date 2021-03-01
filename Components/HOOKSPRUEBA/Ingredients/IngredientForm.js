@@ -3,10 +3,9 @@ import { View,Text,StyleSheet } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Card from '../UI/Card';
 
-const IngredientForm = (props) => {
+const IngredientForm = ({onAddIngredient,loading}) => {
     const [name , setName] = useState('');
     const [amount, setAmount] = useState('');
-    const { onAddIngredient } = props;
     const submitHandler = (name,amount) => {
         onAddIngredient({name:name,amount:amount});
     };

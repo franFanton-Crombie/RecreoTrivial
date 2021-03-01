@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View,ScrollView,Text,StyleSheet,SafeAreaView, Dimensions} from 'react-native';
 import { Fragment } from 'react';
 import QuestionSlide from './QuestionSlide';
-import { funcionRara, grabQuizQuestions, QuestionDifficulty } from '../Helpers/DataQuest';
-import { useValue } from 'react-native-reanimated';
+import { grabQuizQuestions } from '../Helpers/DataQuest';
 import { useNavigation } from '@react-navigation/native';
 import ModalResult from './ModalResult';
 
