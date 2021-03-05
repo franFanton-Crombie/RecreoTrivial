@@ -1,8 +1,11 @@
 import React from 'react';
 import {SafeAreaView,View,Text,StyleSheet} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import useHttp from '../Hooks/useHttp';
 
 const Index = () => {
+    const { userUsers } = useHttp();
+    console.log('Usuarios: ',userUsers);
     return(
         <SafeAreaView>
             <View>

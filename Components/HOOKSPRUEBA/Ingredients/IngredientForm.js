@@ -21,7 +21,7 @@ const IngredientForm = ({onAddIngredient,loading}) => {
                         value={name}
                         onChangeText={name => {
                             setName(name)
-                        }}/>
+                    }}/>
                 </View>
                 <View style={styles.vistaRow}>
                     <Text style={styles.title}>Amount: </Text>
