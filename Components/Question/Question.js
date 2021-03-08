@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View,ScrollView,Text,StyleSheet,SafeAreaView, Dimensions} from 'react-native';
+import { View,ScrollView,Text,StyleSheet,SafeAreaView, Dimensions,Animated} from 'react-native';
 import { Fragment } from 'react';
 import QuestionSlide from './QuestionSlide';
 import { grabQuizQuestions } from '../Helpers/DataQuest';
 import { useNavigation } from '@react-navigation/native';
 import ModalResult from './ModalResult';
-
-export type currAnswerObjectProps = {
-    question: string,
-    answer: string,
-    answerIsCorrect: Boolean,
-    correctAnswer: string,
-}
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 
 const Question = () => {
+    const [key, setKey] = useState(0);
     const navigation = useNavigation();
     const [qloading,setQloading] = useState(false);
     const [allQuestions,setAllQuestions] = useState([]);
@@ -22,6 +17,7 @@ const Question = () => {
     const [totalQuestions] = useState(10);
     const [quizOver,setQuizOver] = useState(false);
     const [curNum,setCurNum] = useState(0);
+    const [playTimer,setPlayTimer] = useState(true);
     /**@type {React.MutableRefObject<ScrollView>} */
     const scroll= useRef(null);
     const [answerIsCorrect,setAnswerIsCorrect] = useState(false);
@@ -29,6 +25,7 @@ const Question = () => {
     const startJob = async() => {
         setQloading(true);
         setQuizOver(false);
+        setKey(0);
         const newQuestions = await grabQuizQuestions(
             totalQuestions,
             'easy'
@@ -39,17 +36,25 @@ const Question = () => {
         setQloading(false);
     }
 
+    const resetState = () => {
+        setQuizOver(false);
+        setKey(0);
+        setScore(0);
+        setUserSelectedAnswers([]);
+    }
+
     const answersSelected = (answer) => {
+        const isCorrect = allQuestions[curNum].correct_answer === answer;
         if(!quizOver){
-            setAnswerIsCorrect(allQuestions[curNum].correct_answer === answer);
+            setAnswerIsCorrect(isCorrect);
         }
-        if(answerIsCorrect){
+        if(isCorrect){
             setScore((score) => score + 1);
         }
         const currAnswerObject = {
             question: allQuestions[curNum].question,
             answer,
-            answerIsCorrect,
+            answerIsCorrect: isCorrect,
             correctAnswer: allQuestions[curNum].correct_answer,
         }
         setUserSelectedAnswers((curranswers) => [...curranswers,currAnswerObject])
@@ -62,6 +67,7 @@ const Question = () => {
         else{
             setQuizOver(true);
         }
+        setKey(prevKey => prevKey + 1);
     }
 
     useEffect(() => {
@@ -112,23 +118,46 @@ const Question = () => {
                                     questionNro={curNum +1}
                                     answersSelected={answersSelected}/>
                                 </View>
-                                <ModalResult
-                                    onRestart={() => {
-                                        startJob();
-                                        navigation.push('Inicio');
-                                    }}
-                                    visible={quizOver}
-                                    onClose={() => {
-                                        setQuizOver(false);
-                                        navigation.push('Inicio');
-                                    }}
-                                    userAnswer={userSelectedAnswers}
-                                />
+                                <View style={{alignItems:"center",marginTop:10}}>
+                                    <CountdownCircleTimer
+                                        key={key}
+                                        isPlaying={playTimer}
+                                        duration={10}
+                                        size={100}
+                                        colors={[
+                                        ['#004777', 0.4],
+                                        ['#F7B801', 0.4],
+                                        ['#A30000', 0.2],
+                                        ]}
+                                        onComplete={() => {nextQuestion()}}
+                                    >
+                                        {({ remainingTime }) => (
+                                        <Animated.Text style={{ color: 'white' }}>
+                                            {remainingTime}
+                                        </Animated.Text>
+                                        )}
+                                    </CountdownCircleTimer>
+                                        </View>
                             </View>
                         </Fragment>
                     )})
                     }
                 </ScrollView>
+                <ModalResult
+                    onRestart={() => {
+                        console.log('RESTART');
+                        resetState();
+                        setPlayTimer(false);
+                        navigation.push('Inicio');
+                    }}
+                    visible={quizOver}
+                    onClose={() => {
+                        console.log('CLOSE');
+                        setQuizOver(false);
+                        navigation.push('Inicio');
+                    }}
+                    userAnswer={userSelectedAnswers}
+                />
             </View>
             )}
             </View>
@@ -142,8 +171,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 30,
-    },
-    container: {
     },
     animacion: {
         height: 200,

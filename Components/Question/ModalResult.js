@@ -1,12 +1,12 @@
 import React, { useState,useEffect } from "react";
-import { Alert, Modal, StyleSheet, Text, Image, View ,TouchableOpacity} from "react-native";
+import { Modal, StyleSheet, Text, Image, View ,TouchableOpacity} from "react-native";
 
 const ModalResult = ({onRestart,userAnswer,visible,onClose}) => {
     const [percent,setPercert] = useState(0);
     const [correctCount, setCorrectCount] =useState(0); 
 
     const calculateScore = () => {
-        let correct = 1;
+        let correct = 0;
         for(const el of userAnswer){
             if(el.answerIsCorrect){
                 correct++;
@@ -53,7 +53,9 @@ const ModalResult = ({onRestart,userAnswer,visible,onClose}) => {
                         <Text style={{fontWeight:'bold',marginTop:20,textAlign:'center'}}>Your attempted {userAnswer.length} questions and you only got {" "} {correctCount} in the quiz test.</Text>
                         <TouchableOpacity
                             style={[styles.button, styles.buttonClose]}
-                            onPress={onRestart}
+                            onPress={() => {
+                              onRestart();
+                            }}
                         >
                             <Text style={{color:'black'}}>Close</Text>
                         </TouchableOpacity>

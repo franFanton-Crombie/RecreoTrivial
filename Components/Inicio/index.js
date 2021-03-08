@@ -1,8 +1,7 @@
 import React from 'react';
 import { View,SafeAreaView,Image,StyleSheet,Text,TouchableOpacity } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-
+import Login from '../Login/Index';
 const Inicio = () =>{
     const navigation = useNavigation();
     return(
@@ -14,24 +13,42 @@ const Inicio = () =>{
                     resizeMode='cover'/>
             </View>
             <View>
-                <Animated.View style={styles.animacion}>
+                <View style={styles.animacion}>
                     <Text style={styles.titulo}>Recreo Trivias</Text>
-                    <Text style={styles.titulo2}>Juga para obtener grandes beneficios.</Text>
-                    <TouchableOpacity 
-                        delayPressIn={0}
-                        style={styles.boton}
-                        onPress={() => navigation.push('Juego')}
-                    >
-                        <Text>Jugar!</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        delayPressIn={0}
-                        style={styles.boton}
-                        onPress={() => navigation.push('Hooks')}
-                    >
-                        <Text>Pruebas Hooks</Text>
-                    </TouchableOpacity>
-                </Animated.View>
+                    <Login />
+                    <View style={styles.rowNoCuenta}>
+                        <View >
+                            <Text style={styles.textNoCuenta}>
+                                No tienes cuenta?
+                            </Text>
+                        </View>
+                        <View>
+                            <TouchableOpacity 
+                            delayPressIn={0}
+                            style={styles.boton}
+                            onPress={() => navigation.push('CrearCuenta')}
+                            >
+                                <Text>Crear Cuenta</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                        <TouchableOpacity 
+                            delayPressIn={0}
+                            style={styles.boton}
+                            onPress={() => navigation.push('Juego')}
+                        >
+                            <Text>Jugar!</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            delayPressIn={0}
+                            style={styles.boton}
+                            onPress={() => navigation.push('Hooks')}
+                        >
+                            <Text>Pruebas Hooks</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
             
         </SafeAreaView>
@@ -44,7 +61,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     animacion: {
-        marginTop: 50,
+        marginTop: 30,
         backgroundColor: '#386BF4',
         height: 200,
         width: '100%',
@@ -68,13 +85,27 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 30,
     },
+    textNoCuenta:{
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 30,
+    },
     boton: {
         alignItems: "center",
         backgroundColor: "#A3FF73",
         padding: 10,
         marginTop: 30,
-        width: 100,
+        width: 150,
         borderRadius: 12,
+        margin: 5
+    },
+    rowNoCuenta:{
+        flexDirection:'row',
+        width: 300,
+        justifyContent: "space-between",
+        alignItems: 'center',
     }
 })
 
