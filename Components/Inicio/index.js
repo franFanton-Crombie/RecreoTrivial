@@ -2,8 +2,12 @@ import React from 'react';
 import { View,SafeAreaView,Image,StyleSheet,Text,TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Login from '../Login/Index';
-const Inicio = () =>{
+import useHttp from '../Hooks/useHttp';
+
+const Inicio = () => {
     const navigation = useNavigation();
+    const { userIngredients } = useHttp();
+    console.log(userIngredients);
     return(
         <SafeAreaView style={{flex:1,backgroundColor:'#386BF4'}}>
             <View style={styles.vistaImagen}>
@@ -15,7 +19,16 @@ const Inicio = () =>{
             <View>
                 <View style={styles.animacion}>
                     <Text style={styles.titulo}>Recreo Trivias</Text>
-                    <Login />
+                    <Login users={userIngredients} />
+                    <View style={{flexDirection:'row'}}>
+                        <TouchableOpacity 
+                            delayPressIn={0}
+                            style={styles.boton}
+                            onPress={() => navigation.push('PantallaPrincipal')}
+                        >
+                            <Text>Aceptar</Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.rowNoCuenta}>
                         <View >
                             <Text style={styles.textNoCuenta}>
@@ -32,25 +45,8 @@ const Inicio = () =>{
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity 
-                            delayPressIn={0}
-                            style={styles.boton}
-                            onPress={() => navigation.push('Juego')}
-                        >
-                            <Text>Jugar!</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            delayPressIn={0}
-                            style={styles.boton}
-                            onPress={() => navigation.push('Hooks')}
-                        >
-                            <Text>Pruebas Hooks</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </View>
-            
         </SafeAreaView>
     );
 };

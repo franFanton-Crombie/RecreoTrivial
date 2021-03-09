@@ -1,11 +1,10 @@
 import React from 'react';
 import {SafeAreaView,View,Text,StyleSheet} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import useHttp from '../Hooks/useHttp';
 
-const Index = () => {
-    const { userUsers } = useHttp();
-    console.log('Usuarios: ',userUsers);
+const Index = ({users}) => {
+    console.log('LOGIN Users: ',users);
+
     return(
         <SafeAreaView>
             <View>
@@ -40,10 +39,10 @@ const styles = StyleSheet.create({
     },
     textLogin: {
         color: 'white',
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 10
+        marginTop: 20
     },
     textTitulo: {
         color: 'white',

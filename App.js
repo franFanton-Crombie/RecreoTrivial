@@ -7,6 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Hooks from './components/HOOKSPRUEBA/Ingredients';
 import CrearCuenta from './components/Login/CreateAccount';
+import PantallaPrincipal from './components/Inicio/pantallaPrincipal';
+
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -21,6 +23,7 @@ const App = () => {
           <Stack.Screen name={'Hooks'} component={Hooks} />
           <Stack.Screen name={'Login'} component={Login} />
           <Stack.Screen name={'CrearCuenta'} component={CrearCuenta} />
+          <Stack.Screen name={'PantallaPrincipal'} component={PantallaPrincipal} />
         </Stack.Navigator>
       </NavigationContainer>
   );

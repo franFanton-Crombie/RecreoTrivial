@@ -38,7 +38,7 @@ const httpReducer = (currentHttpState, action) => {
 const useHttp = () => {
     const [userIngredients, dispatch] = useReducer(ingredientReducer,[]);
     const [httpState,dispatchHttp] = useReducer(httpReducer, initialState);
-
+    console.log('Ingredients:' ,userIngredients);
     const sendRequest = useCallback((url,method,body,requestExtra,requestIdentifier) => {
         dispatchHttp({ type: 'SEND',identifier:requestIdentifier})
         fetch(url,{

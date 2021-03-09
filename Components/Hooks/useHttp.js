@@ -7,20 +7,24 @@ const initialState = {
     identifier: null
 };
 
-function userReducer(currentUsers, action){
+function ingredientReducer(currentUsers, action){
+    console.log('CURRENT ING Current: ',currentUsers);
+    console.log('ACTION: Reducer',action);
     switch (action.type){
         case 'SET':
             return action.users;
         case 'ADD':
             return [...currentUsers, action.user];
         case 'DELETE':
-            return currentUsers.filter(ing => ing.id !== action.id);
+            return currentUsers.filter(user => user.id !== action.id);
         default:
             throw new Error('Should not get there!');
     }
 }
 
 const httpReducer = (currentHttpState, action) => {
+    console.log('CURRENT HTTP STATE: ',currentHttpState);
+    console.log('ACTION HTTP STATE: ',action);
     switch (action.type) {
         case 'SEND':
             return { loading: true, error: null, data: null, extra: null, identifier: action.identifier};
@@ -36,9 +40,8 @@ const httpReducer = (currentHttpState, action) => {
 }
 
 const useHttp = () => {
-    const [userUsers, dispatch] = useReducer(userReducer,[]);
+    const [userIngredients, dispatch] = useReducer(ingredientReducer,[]);
     const [httpState,dispatchHttp] = useReducer(httpReducer, initialState);
-
     const sendRequest = useCallback((url,method,body,requestExtra,requestIdentifier) => {
         dispatchHttp({ type: 'SEND',identifier:requestIdentifier})
         fetch(url,{
@@ -72,7 +75,7 @@ const useHttp = () => {
         dispatch({ type: 'SET', users: filteredUsers });
     }, []);
 
-    const removeUsers = useCallback( userId => {
+    const removeUsers = useCallback(userId => {
         sendRequest(
             `https://react-hooks-update-2a961-default-rtdb.firebaseio.com/users/${userId}.json`,
             'DELETE',
@@ -87,7 +90,7 @@ const useHttp = () => {
             dispatch({type: 'DELETE', id: httpState.extra}) 
         }
         else if(!httpState.loading && !httpState.error && httpState.identifier === 'ADD_USER'){
-            dispatch({type: 'ADD' , ingredient: {id: httpState.data.name, ...httpState.extra}});
+            dispatch({type: 'ADD' , user: {id: httpState.data.name, ...httpState.extra}});
         }
     },[httpState.data,httpState.extra,httpState.loading,httpState.error]);
     
@@ -98,7 +101,7 @@ const useHttp = () => {
         addUsers,
         filteredUsers,
         removeUsers,
-        userUsers,
+        userIngredients,
         sendRequest,
         
     };
