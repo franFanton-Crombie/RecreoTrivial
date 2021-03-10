@@ -2,13 +2,13 @@ import React from 'react';
 import {SafeAreaView,View,Text,TouchableOpacity,StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const pantallaPrincipal = () => {
+const pantallaPrincipal = ({route}) => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#386BF4'}}>
             <View>
                 <Text style={styles.tituloRanking}>
-                    Ranking de Trivia
+                    Ranking de Trivia - <Text>{route.params.email}-{route.params.password}</Text>
                 </Text>
                 <Text style={styles.tituloRanking}>
                     ...
